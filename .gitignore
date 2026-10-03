@@ -1,0 +1,41 @@
+# Environment variables & secrets (CRITICAL)
+.env
+*.env
+backend/.env
+frontend/.env
+*.env.local
+*.env.production
+
+# Dependencies
+node_modules/
+frontend/node_modules/
+.venv/
+venv/
+__pycache__/
+backend/app/**/__pycache__/
+*.py[cod]
+
+# Next.js build
+frontend/.next/
+frontend/out/
+.next/
+out/
+build/
+dist/
+
+# Databases & local sqlite
+*.db
+*.sqlite
+*.sqlite3
+healthcare_dev.db
+backend/healthcare_dev.db
+
+# IDE & OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
