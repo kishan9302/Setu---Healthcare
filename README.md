@@ -109,3 +109,47 @@ Open `http://localhost:3000` in your browser.
      `Bhopal City Hospital (18 units, Shortage) ─── 8.1 km ───> Indore Memorial Care (500 units, Surplus)`
    - Click **Review Opportunity**: Inspect the visual corridor modal and click **Confirm & Request Stock Rebalance** (Human-in-the-loop simulated request).
    - **Live Stock Update**: Click **Update** on any row in the Medicine Inventory table to modify stock or daily consumption — notice how the status and days remaining recalculate deterministically in real time!
+
+---
+
+## ☁️ Production Deployment Guide
+
+### 1. Frontend on Vercel
+
+The repository is pre-configured with root and subdirectory deployment support (`vercel.json` included):
+
+1. Push your repository to GitHub:
+   ```bash
+   git remote add origin https://github.com/kishan9302/Setu---Healthcare.git
+   git branch -M main
+   git push -u origin main
+   ```
+2. In the [Vercel Dashboard](https://vercel.com/new), click **Import Project** and select `Setu---Healthcare`.
+3. Set the build configuration:
+   - **Framework Preset**: Next.js
+   - **Root Directory**: `frontend` (or leave root with the included `vercel.json`)
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `.next`
+4. Add the Environment Variable:
+   - `NEXT_PUBLIC_API_URL`: Your deployed FastAPI backend URL (e.g. `https://setu-backend.onrender.com`)
+5. Click **Deploy**.
+
+---
+
+### 2. Backend on Render.com or Railway
+
+1. In Render / Railway, create a **New Web Service** connected to your GitHub repository.
+2. Configure the deployment settings:
+   - **Root Directory**: `backend`
+   - **Environment**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+3. Add the required Environment Variables:
+   - `DATABASE_URL`: Your Neon PostgreSQL connection string (`postgresql://user:password@ep-xyz.neon.tech/neondb?sslmode=require`)
+   - `GROQ_API_KEY`: Your Groq Cloud API Key (`gsk_...`)
+   - `JWT_SECRET`: Random 32+ character string for token signing
+   - `CORS_ORIGINS`: Comma-separated list including your Vercel URL and localhost (`https://your-app.vercel.app,http://localhost:3000`)
+4. Seed the initial database (run once in the web service shell):
+   ```bash
+   python -c "from app.db.seed_data import seed_database; seed_database()"
+   ```
